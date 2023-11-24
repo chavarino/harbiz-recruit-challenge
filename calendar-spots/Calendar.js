@@ -1,16 +1,50 @@
 const moment = require('moment')
-const fs = require('fs');
+const { CalendarFileReader } = require('./calendar-reader')
+const { CalendarLogic } = require('./calendar-logic')
+
+// crear clase calendar 
+// inyeccion de dependencias del reader de archivos crear adaptador (read) 
+// dependencias del moment tambien puede ser buena idea  directamente porque es grande la impl
+//calendar :
+// calendarId, date, duration, rawdatacalendar
+//dateIso
+const calendarReader = new CalendarFileReader()
 
 
-// 
-function getAvailableSpots(calendar, date, duration ) {
+function getAvailableSpots(calendarId, dateKey, durationSelection) {
+	/*let calendarData = calendarReader.read(calendarId)
+
+	const dateISO = moment(dateKey, 'DD-MM-YYYY').format('YYYY-MM-DD')
+	let durationBefore = calendarData.durationBefore;
+	let durationAfter = calendarData.durationAfter;
+	let daySlots = []
+	for (const key in calendarData.slots) { //get slot filtered by input date 10-04-2023
+		if (key === dateKey) {
+			daySlots = calendarData.slots[key]
+		}
+	}*/
+	const calendar = new CalendarLogic(calendarId, dateKey, calendarReader)
+
+
+	calendar.filterDaySlots()
+
+	calendar.filterEmptySpots()
+
+	return calendar.getAvalaibleSpotsByDuration(durationSelection);
+}
+
+
+
+/*
+function getAvailableSpotsDeprecated(calendar, date, duration ) {
 	let rawdata = fs.readFileSync('./calendars/calendar.' + calendar + '.json');
 	let data = JSON.parse(rawdata);
+ 
 	const dateISO = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD')
 	let durationBefore = data.durationBefore;
 	let durationAfter = data.durationAfter;
 	let daySlots = []
-	for (const key in data.slots) {
+	for (const key in data.slots) { //get slot filtered by input date 10-04-2023
 		if (key === date) {
 			daySlots = data.slots[key]
 		}
@@ -105,6 +139,6 @@ function getAvailableSpots(calendar, date, duration ) {
 		return arrSlot;
 	});
 	return arrSlot;
-}
+}*/
 
 module.exports = { getAvailableSpots }
