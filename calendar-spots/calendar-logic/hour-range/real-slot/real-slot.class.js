@@ -5,10 +5,22 @@ class RealSlot extends HourRange {
 
 
 
+    checkDurations(durationBefore, tag) {
+
+        if (
+            typeof durationBefore !== 'number' || durationBefore < 0
+        ) {
+            throw new Error(`Invalid ${tag}. It must be a number greater than or equal to zero.`);
+        }
+ 
+    }
 
     getEmptySlotsByDuration(durationBefore, duration, durationAfter) {
 
-
+        this.checkDurations(durationBefore, "durationBefore")
+        this.checkDurations(duration, "duration")
+        this.checkDurations(durationAfter, "durationAfter")
+            
         const startHourFirst = this.getMomentHour(this.getStartHour());
 
         const endHour = this.addMinutes(startHourFirst, durationBefore + duration + durationAfter);

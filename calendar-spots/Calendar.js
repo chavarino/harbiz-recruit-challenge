@@ -8,6 +8,11 @@ const calendarReader = new CalendarFileReader()
 
 function getAvailableSpots(calendarId, dateKey, durationSelection) {
 
+
+
+	if (!calendarId || !dateKey || !durationSelection) {
+		throw new Error("Invalid input parameters. calendarId, dateKey, and durationSelection are required.");
+	}
 	const calendar = new CalendarLogic(calendarId, dateKey, calendarReader)
 
 
@@ -16,6 +21,7 @@ function getAvailableSpots(calendarId, dateKey, durationSelection) {
 	calendar.filterEmptySpots()
 
 	return calendar.getAvalaibleSpotsByDuration(durationSelection);
+
 }
 
 

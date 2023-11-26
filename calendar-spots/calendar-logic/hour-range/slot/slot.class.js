@@ -9,6 +9,9 @@ class Slot extends HourRange {
 
 
     calculateEmptySlots(sessionSlot) {
+        if (!sessionSlot && !(this.sessionSlot instanceof HourRange)) {
+            throw new Error(`Invalid sessionSlot: ${sessionSlot}. It must be an instance of HourRange.`);
+          }
 
         if (sessionSlot.getFormatedStartHour() > this.getFormatedStartHour() &&
             sessionSlot.getFormatedEndHour() < this.getFormatedEndHour()) {//session is at middle of slot
